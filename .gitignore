@@ -1,0 +1,17 @@
+/.idea
+/.DS_Store
+/.vscode
+/.coverage
+**/__pycache__/
+**/cacheModel/
+/src/*.egg-info
+/dist
+/.tox
+/build
+
+/logs
+**/*.log
+**/*.zip
+/htmlcov
+/tmp
+**/events.out.tfevents.*
