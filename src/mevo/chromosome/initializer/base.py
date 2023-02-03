@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 import numpy as np
 
-from mevo.gene.gene_type import GeneShape
+from mevo import mtype
 
 
 class Initializer(ABC):
 
     @abstractmethod
-    def initialize(self, shape: GeneShape) -> np.ndarray:
+    def initialize(self, size: mtype.ChromosomeSize) -> np.ndarray:
         pass

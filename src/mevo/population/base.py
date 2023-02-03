@@ -1,40 +1,38 @@
 import typing as tp
 from abc import ABC, abstractmethod
 
-from mevo.gene import Initializer, Gene, GeneShape
+import numpy as np
+
+from mevo import chromosome
+from mevo import mtype
 from mevo.individual.base import Individual
 
 
 class Population(ABC):
-    individual_type: tp.Type[Individual]
-    default_initializer: Initializer
+    default_initializer: chromosome.Initializer
 
     def __init__(
             self,
-            num: int,
-            gene_shape: GeneShape,
-            gene_initializer: Initializer,
+            max_size: int,
+            chromo_size: mtype.ChromosomeSize,
+            mutation_rate: float = 0.01
     ):
-        self.num = num
-        self.gene_shape = gene_shape
-        self.gene_initializer = gene_initializer
-
-        if self.gene_initializer is None:
-            self.gene_initializer = self.default_initializer
-        if not isinstance(self.gene_initializer, self.default_initializer.__class__):
-            raise TypeError(f"this initializer must be {self.default_initializer.__class__.__name__}")
+        self.max_size = max_size
+        if isinstance(chromo_size, int):
+            chromo_size = [1] * chromo_size
+        self.chromo_shape: tp.Sequence[int] = chromo_size
+        self.mutation_rate = mutation_rate
 
         self.global_iid = 0
         self.members: tp.Dict[str, Individual] = {}
-        self._build()
 
-    def _build(
-            self,
-    ):
-        for _ in range(self.num):
-            gene = Gene(shape=self.gene_shape, initializer=self.gene_initializer)
-            ind = self.individual_type(gene)
-            self.add(ind)
+    @abstractmethod
+    def _build(self):
+        pass
+
+    @abstractmethod
+    def crossover(self, n_children) -> tp.List[Individual]:
+        ...
 
     def add(self, ind: Individual) -> str:
         if ind.id != "" or ind.id in self.members:
@@ -58,9 +56,13 @@ class Population(ABC):
     def reproduce(self, n_children: int):
         children = self.crossover(n_children=n_children)
         for c in children:
-            c.mutate()
+            c.mutate(self.mutation_rate)
             self.add(c)
 
-    @abstractmethod
-    def crossover(self, n_children) -> tp.List[Individual]:
-        ...
+    def pick_parents(self, n: int) -> tp.Tuple[Individual, Individual]:
+        pop_id = list(self.members.keys())
+        parents = np.random.choice(pop_id, size=n * 2, replace=True)
+        fathers_id = parents[:n]
+        mothers_2id = parents[n:]
+        for (fid, mid) in zip(fathers_id, mothers_2id):
+            yield self.members[fid], self.members[mid]

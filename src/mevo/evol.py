@@ -2,14 +2,14 @@ import typing as tp
 from queue import PriorityQueue
 
 from mevo.individual.base import Individual
-from mevo.pop.base import Population
+from mevo.population.base import Population
 
 
 def evolve(
         pop: Population,
         fitness_fn: tp.Callable[[Individual], float],
         drop_ratio: float = 0.4,
-) -> tp.Tuple[tp.Dict[str, float], tp.Dict[str, float]]:
+) -> tp.Tuple[Individual, tp.Dict[str, float], tp.Dict[str, float]]:
     # selection
     if drop_ratio >= 1. or drop_ratio <= 0:
         raise ValueError(f"drop_ratio must in range of (0, 1), but got {drop_ratio}")
@@ -27,6 +27,11 @@ def evolve(
         dropped[iid] = kept.pop(iid)
         pop.remove_by_id(iid)
 
+    while q.qsize() > 1:
+        q.get_nowait()
+    iid = q.get()[1]
+    top = pop.members[iid]
+
     # reproduce
     pop.reproduce(n_children=drop_num)
-    return kept, dropped
+    return top, kept, dropped

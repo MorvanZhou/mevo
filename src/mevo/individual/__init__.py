@@ -1,2 +1,2 @@
 from mevo.individual.base import Individual
-from mevo.individual.ga import GAInt, GAOrder
+from mevo.individual.ga import GeneticAlgoInt, GeneticAlgoOrder, GeneticAlgoFloat, GeneticAlgoDense

@@ -1,4 +1,6 @@
-from mevo import gene
+from mevo import chromosome
 from mevo import individual
-from mevo import pop
+from mevo import mtype
+from mevo import population
+from mevo.chromosome.chromosome import BinaryChromo, IntChromo, FloatChromo
 from mevo.evol import evolve

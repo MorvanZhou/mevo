@@ -1,40 +1,59 @@
+import typing as tp
+
 import numpy as np
 
-from mevo.gene import initializer
-from mevo.gene.gene import Gene
+from mevo import chromosome
 from mevo.individual.base import Individual
 
 
-class GAInt(Individual):
-    def __init__(self, gene: Gene):
-        super().__init__(gene=gene)
-        self.gene = gene
-        self.mutate_rate = 0.05
+class GeneticAlgoInt(Individual):
+    def __init__(self):
+        super().__init__()
+        self.chromosomes: tp.List[chromosome.IntChromo] = []
 
-        if not isinstance(self.gene.initializer, initializer.RandomInt):
-            raise TypeError("GA must use initializer.RandomInt")
-        init = self.gene.initializer
-        self.low = init.low
-        self.high = init.high
-
-    def mutate(self):
-        flat_gene = self.gene.data.ravel()
-        length = len(flat_gene)
-        indices = np.arange(length)[np.random.rand(length) < self.mutate_rate]
-        flat_gene[indices] = np.random.randint(self.low, self.high, size=len(indices))
+    def mutate(self, rate: float):
+        for c in self.chromosomes:
+            indices = [i for i in range(c.data.size) if np.random.random() < rate]
+            c.data.ravel()[indices] = np.random.randint(c.low, c.high, size=len(indices))
 
 
-class GAOrder(Individual):
-    def __init__(self, gene: Gene):
-        super().__init__(gene=gene)
-        self.gene = gene
-        self.mutate_rate = 0.05
+class GeneticAlgoOrder(Individual):
+    def __init__(self):
+        super().__init__()
+        self.chromosomes: tp.List[chromosome.IntChromo] = []
+        self.init = chromosome.initializer.RandomOrder()
 
-        if not isinstance(self.gene.initializer, initializer.RandomOrder):
-            raise TypeError("GA must use initializer.RandomOrder")
+    def mutate(self, rate: float):
+        lc = len(self.chromosomes)
+        for i in range(lc):
+            if np.random.rand() < rate:
+                idx = np.random.randint(0, lc)
+                self.chromosomes[i], self.chromosomes[idx] = self.chromosomes[idx], self.chromosomes[i]
 
-    def mutate(self):
-        for row in self.gene.data:
-            if np.random.rand() < self.mutate_rate:
-                idx = np.random.randint(0, len(row), size=2)
-                row[idx] = row[idx[::-1]]
+
+class GeneticAlgoFloat(Individual):
+    def __init__(self):
+        super().__init__()
+        self.chromosomes: tp.List[chromosome.FloatChromo] = []
+
+    def mutate(self, rate: float):
+        for c in self.chromosomes:
+            indices = [i for i in range(c.data.size) if np.random.random() < rate]
+            c.data.ravel()[indices] += np.random.normal(0, 0.1, size=len(indices))
+
+
+class GeneticAlgoDense(GeneticAlgoFloat):
+    def predict(self, x: np.ndarray):
+        if x.ndim == 1:
+            o = x[None, :]
+        else:
+            o = x
+        for c in self.chromosomes[:-1]:
+            w = c.data[:-1]
+            b = c.data[-1]
+            o = o.dot(w) + b
+            o = np.maximum(o, 0)  # ReLU
+        w = self.chromosomes[-1].data[:-1]
+        b = self.chromosomes[-1].data[-1]
+        logits = o.dot(w) + b
+        return logits.ravel()
