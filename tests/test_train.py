@@ -142,7 +142,7 @@ class GATest(unittest.TestCase):
             seed=1
         ) as pop:
             for _ in range(step):
-                _, kept, dropped = pop.evolve(
+                top, kept, dropped = pop.evolve(
                     fitness_fn=pendulum_fitness_fn,
                     drop_rate=0.7,
                 )
