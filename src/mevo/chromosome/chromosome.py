@@ -12,7 +12,7 @@ class Chromosome(ABC):
     initializer: initializer.Initializer
 
     @abstractmethod
-    def random_init(self, size: mtype.ChromosomeSize):
+    def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
         pass
 
     @abstractmethod
@@ -36,8 +36,8 @@ class BinaryChromo(Chromosome):
             raise TypeError("array type must be bool or integer")
         self.data = data.astype(np.bool_)
 
-    def random_init(self, size: mtype.ChromosomeSize):
-        self.data = initializer.RandomInt(low=0, high=1).initialize(size=size).astype(np.bool_)
+    def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
+        self.data = initializer.RandomInt(low=0, high=1, seed=seed).initialize(size=size).astype(np.bool_)
 
     def copy(self):
         return BinaryChromo(data=self.data.copy())
@@ -56,8 +56,8 @@ class IntChromo(Chromosome):
         data = np.clip(data, a_min=self.low, a_max=self.high)
         self.data = data.astype(np.int32)
 
-    def random_init(self, size: mtype.ChromosomeSize):
-        self.data = initializer.RandomInt(low=self.low, high=self.high).initialize(size=size)
+    def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
+        self.data = initializer.RandomInt(low=self.low, high=self.high, seed=seed).initialize(size=size)
 
     def copy(self):
         return IntChromo(low=self.low, high=self.high, data=self.data.copy())
@@ -78,11 +78,11 @@ class FloatChromo(Chromosome):
             data = np.minimum(data, self.high)
         self.data = data
 
-    def random_init(self, size: mtype.ChromosomeSize):
+    def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
         if self.low is not None and self.high is not None:
-            self.data = initializer.RandomUniform(low=self.low, high=self.high).initialize(size=size)
+            self.data = initializer.RandomUniform(low=self.low, high=self.high, seed=seed).initialize(size=size)
         else:
-            self.data = initializer.RandomNorm(0, 1).initialize(size=size)
+            self.data = initializer.RandomNorm(mean=0, std=1, seed=seed).initialize(size=size)
 
     def copy(self):
         return FloatChromo(low=self.low, high=self.high, data=self.data.copy())

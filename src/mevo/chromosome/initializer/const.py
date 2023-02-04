@@ -8,6 +8,7 @@ from mevo.chromosome.initializer.base import Initializer
 
 class Const(Initializer):
     def __init__(self, value: tp.Union[int, float]):
+        super().__init__(seed=None)
         self.value = value
 
     def initialize(self, size: mtype.ChromosomeSize) -> np.ndarray:

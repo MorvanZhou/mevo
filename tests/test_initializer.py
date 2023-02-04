@@ -87,3 +87,12 @@ class InitTest(unittest.TestCase):
                 t = (t,)
             self.assertEqual(t, data.shape)
             self.assertTrue(np.all((data >= low) & (data <= high)), msg=data)
+
+    def test_seed(self):
+        init = initializer.RandomInt(0, 10, seed=1)
+        a = init.rng.integers(low=1, high=10, size=10)
+        b = init.rng.integers(low=1, high=10, size=10)
+        self.assertTrue(np.all(a != b))
+        init.set_seed(1)
+        b = init.rng.integers(low=1, high=10, size=10)
+        self.assertTrue(np.all(a == b))

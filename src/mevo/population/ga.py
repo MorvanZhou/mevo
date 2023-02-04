@@ -17,11 +17,21 @@ class GeneticAlgoInt(Population):
             chromo_size: mtype.ChromosomeSize,
             chromo_initializer: tp.Optional[chromosome.initializer.RandomInt] = None,
             mutation_rate: float = 0.01,
+            parallel: bool = False,
+            seed: int = None,
     ):
-        super().__init__(max_size=max_size, chromo_size=chromo_size, mutation_rate=mutation_rate)
+        super().__init__(
+            max_size=max_size,
+            chromo_size=chromo_size,
+            mutation_rate=mutation_rate,
+            parallel=parallel,
+            seed=seed,
+        )
         if chromo_initializer is None:
             chromo_initializer = self.default_initializer
         self.chromo_initializer = chromo_initializer
+        self.chromo_initializer.set_seed(seed)
+        self._rng = np.random.default_rng(seed)
         self.low = self.chromo_initializer.low
         self.high = self.chromo_initializer.high
         self._build()
@@ -41,7 +51,7 @@ class GeneticAlgoInt(Population):
         for p1, p2 in self.pick_parents(n_children):
             child = individual.GeneticAlgoInt()
             for c1, c2 in zip(p1.chromosomes, p2.chromosomes):
-                c = c1.copy() if np.random.random() < 0.5 else c2.copy()
+                c = c1.copy() if self._rng.random() < 0.5 else c2.copy()
                 child.chromosomes.append(c)
             new_children.append(child)
         return new_children
@@ -53,14 +63,23 @@ class GeneticAlgoOrder(Population):
             max_size: int,
             chromo_size: mtype.ChromosomeSize,
             mutation_rate: float = 0.01,
+            parallel: bool = False,
+            seed: int = None,
     ):
-        super().__init__(max_size=max_size, chromo_size=chromo_size, mutation_rate=mutation_rate)
+        super().__init__(
+            max_size=max_size,
+            chromo_size=chromo_size,
+            mutation_rate=mutation_rate,
+            parallel=parallel,
+            seed=seed,
+        )
+        self._rng = np.random.default_rng(seed)
         self._build()
 
     def _build(self):
         for _ in range(self.max_size):
             cs = []
-            order = np.random.permutation(len(self.chromo_shape))
+            order = self._rng.permutation(len(self.chromo_shape))
             for i in order:
                 cs.append(chromosome.IntChromo(low=0, high=len(self.chromo_shape), data=np.array([i])))
             ind = individual.GeneticAlgoInt()
@@ -74,7 +93,7 @@ class GeneticAlgoOrder(Population):
             dropped = []
             for c1 in p1.chromosomes:
                 c1: chromosome.IntChromo
-                if np.random.random() < 0.5:
+                if self._rng.random() < 0.5:
                     child.chromosomes.append(c1.copy())
                 else:
                     dropped.append(c1.data[0])
@@ -95,11 +114,21 @@ class GeneticAlgoFloat(Population):
             chromo_size: mtype.ChromosomeSize,
             chromo_initializer: tp.Optional[chromosome.initializer.RandomNorm] = None,
             mutation_rate: float = 0.01,
+            parallel: bool = False,
+            seed: int = None,
     ):
-        super().__init__(max_size=max_size, chromo_size=chromo_size, mutation_rate=mutation_rate)
+        super().__init__(
+            max_size=max_size,
+            chromo_size=chromo_size,
+            mutation_rate=mutation_rate,
+            parallel=parallel,
+            seed=seed,
+        )
         if chromo_initializer is None:
             chromo_initializer = self.default_initializer
         self.chromo_initializer = chromo_initializer
+        self.chromo_initializer.set_seed(seed)
+        self._rng = np.random.default_rng(seed)
         self._build()
 
     def _build(self):
@@ -117,7 +146,7 @@ class GeneticAlgoFloat(Population):
         for p1, p2 in self.pick_parents(n_children):
             child = individual.GeneticAlgoFloat()
             for c1, c2 in zip(p1.chromosomes, p2.chromosomes):
-                c = c1.copy() if np.random.random() < 0.5 else c2.copy()
+                c = c1.copy() if self._rng.random() < 0.5 else c2.copy()
                 child.chromosomes.append(c)
             new_children.append(child)
         return new_children
@@ -134,19 +163,29 @@ class GeneticAlgoNet(Population):
             w_initializer: tp.Optional[chromosome.initializer.Initializer] = None,
             b_initializer: tp.Optional[chromosome.initializer.Initializer] = None,
             mutation_rate: float = 0.01,
+            parallel: bool = False,
+            seed: int = None,
     ):
         chromo_size = []
         for i in range(len(layer_size) - 1):
             chromo_size.append((layer_size[i] + 1, layer_size[i+1]))
 
         super().__init__(
-            max_size=max_size, chromo_size=chromo_size, mutation_rate=mutation_rate)
+            max_size=max_size,
+            chromo_size=chromo_size,
+            mutation_rate=mutation_rate,
+            parallel=parallel,
+            seed=seed,
+        )
         if w_initializer is None:
             w_initializer = self.default_w_initializer
         if b_initializer is None:
             b_initializer = self.default_b_initializer
         self.w_initializer = w_initializer
         self.b_initializer = b_initializer
+        self.w_initializer.set_seed(seed)
+        self.b_initializer.set_seed(seed)
+        self._rng = np.random.default_rng(seed)
         self.n_layer = len(chromo_size) - 1
         self._build()
 
@@ -169,7 +208,7 @@ class GeneticAlgoNet(Population):
         for p1, p2 in self.pick_parents(n_children):
             child = individual.GeneticAlgoDense()
             for c1, c2 in zip(p1.chromosomes, p2.chromosomes):
-                c = c1.copy() if np.random.random() < 0.5 else c2.copy()
+                c = c1.copy() if self._rng.random() < 0.5 else c2.copy()
                 child.chromosomes.append(c)
             new_children.append(child)
         return new_children
