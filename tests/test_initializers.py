@@ -2,13 +2,13 @@ import unittest
 
 import numpy as np
 
-from mevo.chromosome import initializer
+from mevo.chromosomes import initializers
 
 
 class InitTest(unittest.TestCase):
 
     def test_const(self):
-        init = initializer.Const(2)
+        init = initializers.Const(2)
         for t in [
             2,
             3,
@@ -22,7 +22,7 @@ class InitTest(unittest.TestCase):
     def test_randint(self):
         low = -1
         high = 3
-        init = initializer.RandomInt(low=low, high=high)
+        init = initializers.RandomInt(low=low, high=high)
         for t in [
             2,
             3,
@@ -36,7 +36,7 @@ class InitTest(unittest.TestCase):
             self.assertTrue(np.all((data >= low) & (data <= high)), msg=data)
 
     def test_rand_norm(self):
-        init = initializer.RandomNorm(mean=0, std=0)
+        init = initializers.RandomNorm(mean=0, std=0)
         for t in [
             2,
             3,
@@ -51,7 +51,7 @@ class InitTest(unittest.TestCase):
             self.assertTrue(np.all(data == 0), msg=data)
 
     def test_rand_order(self):
-        init = initializer.RandomOrder()
+        init = initializers.RandomOrder()
         for t in [
             2,
             3,
@@ -74,7 +74,7 @@ class InitTest(unittest.TestCase):
     def test_rand_uniform(self):
         low = 1
         high = 3
-        init = initializer.RandomUniform(low=low, high=high)
+        init = initializers.RandomUniform(low=low, high=high)
         for t in [
             2,
             3,
@@ -89,7 +89,7 @@ class InitTest(unittest.TestCase):
             self.assertTrue(np.all((data >= low) & (data <= high)), msg=data)
 
     def test_seed(self):
-        init = initializer.RandomInt(0, 10, seed=1)
+        init = initializers.RandomInt(0, 10, seed=1)
         a = init.rng.integers(low=1, high=10, size=10)
         b = init.rng.integers(low=1, high=10, size=10)
         self.assertTrue(np.all(a != b))

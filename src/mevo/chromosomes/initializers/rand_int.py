@@ -1,11 +1,11 @@
 import numpy as np
 
 from mevo import mtype
-from mevo.chromosome.initializer.base import Initializer
+from mevo.chromosomes.initializers.base import Initializer
 
 
-class RandomUniform(Initializer):
-    def __init__(self, low: float, high: float, seed: int = None):
+class RandomInt(Initializer):
+    def __init__(self, low: int, high: int, seed: int = None):
         super().__init__(seed=seed)
         if low > high:
             raise ValueError(f"low is greater than high, {low} > {high}")
@@ -13,4 +13,4 @@ class RandomUniform(Initializer):
         self.high = high
 
     def initialize(self, size: mtype.ChromosomeSize) -> np.ndarray:
-        return self.rng.uniform(low=self.low, high=self.high, size=size).astype(np.float32)
+        return self.rng.integers(low=self.low, high=self.high, size=size).astype(np.int32)

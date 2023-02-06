@@ -1,7 +1,7 @@
 import numpy as np
 
 from mevo import mtype
-from mevo.chromosome.initializer.base import Initializer
+from mevo.chromosomes.initializers.base import Initializer
 
 
 class RandomNorm(Initializer):

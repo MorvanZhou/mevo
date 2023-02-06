@@ -4,12 +4,12 @@ from abc import ABC, abstractmethod
 import numpy as np
 
 from mevo import mtype
-from mevo.chromosome import initializer
+from mevo.chromosomes import initializers
 
 
 class Chromosome(ABC):
     data: np.ndarray
-    initializer: initializer.Initializer
+    initializer: initializers.Initializer
 
     @abstractmethod
     def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
@@ -37,7 +37,7 @@ class BinaryChromo(Chromosome):
         self.data = data.astype(np.bool_)
 
     def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
-        self.data = initializer.RandomInt(low=0, high=1, seed=seed).initialize(size=size).astype(np.bool_)
+        self.data = initializers.RandomInt(low=0, high=1, seed=seed).initialize(size=size).astype(np.bool_)
 
     def copy(self):
         return BinaryChromo(data=self.data.copy())
@@ -57,7 +57,7 @@ class IntChromo(Chromosome):
         self.data = data.astype(np.int32)
 
     def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
-        self.data = initializer.RandomInt(low=self.low, high=self.high, seed=seed).initialize(size=size)
+        self.data = initializers.RandomInt(low=self.low, high=self.high, seed=seed).initialize(size=size)
 
     def copy(self):
         return IntChromo(low=self.low, high=self.high, data=self.data.copy())
@@ -80,9 +80,9 @@ class FloatChromo(Chromosome):
 
     def random_init(self, size: mtype.ChromosomeSize, seed: int = None):
         if self.low is not None and self.high is not None:
-            self.data = initializer.RandomUniform(low=self.low, high=self.high, seed=seed).initialize(size=size)
+            self.data = initializers.RandomUniform(low=self.low, high=self.high, seed=seed).initialize(size=size)
         else:
-            self.data = initializer.RandomNorm(mean=0, std=1, seed=seed).initialize(size=size)
+            self.data = initializers.RandomNorm(mean=0, std=1, seed=seed).initialize(size=size)
 
     def copy(self):
         return FloatChromo(low=self.low, high=self.high, data=self.data.copy())
