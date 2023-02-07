@@ -65,8 +65,8 @@ Chromosomes then formed an Individual. A Population consists of many individuals
 
 ![data](https://github.com/MorvanZhou/mevo/raw/main/images/dataStructural.png)
 
-This is different from the classical Genetic Algorithm which their chromosome only consists of a 1D array.
-In other words, chromosome in the MEvo is n-D array with different shape.
+It is different from the classical Genetic Algorithms whose chromosome only consists of a 1D array.
+In other words, chromosome in the MEvo is n-D array with different shapes.
 
 ![data](https://github.com/MorvanZhou/mevo/raw/main/images/dataShape.png)
 
@@ -89,10 +89,10 @@ and how to mutate the new chromosome.
 
 ![crossoverMutation](https://github.com/MorvanZhou/mevo/raw/main/images/crossoverMutation.png)
 
-And MEvo's Evolution Strategy has different two steps:
+And MEvo's Evolution Strategy has two different steps:
 
-1. mutate gene (normal distribution) from one single chromosome
-2. update this chromosome by all mutated results
+1. mutate gene (normal distribution) from same chromosomes
+2. update this chromosome by the performance of all mutated children
 
 ![es](https://github.com/MorvanZhou/mevo/raw/main/images/es.png)
 
@@ -113,7 +113,7 @@ if __name__ == "__main__":
 ```
 
 Note that the parallel code must be run under `if __name__ == "__main__"：` scope,
-otherwise a python multiprocessing err will occur.
+otherwise a python multiprocessing error will occur.
 
 # Install
 
