@@ -1,5 +1,3 @@
-import time
-
 import gymnasium
 import numpy as np
 
@@ -10,7 +8,6 @@ import mevo
 def fitness_fn(ind: mevo.individuals.Individual, conf: dict) -> float:
     ep_r = 0
     env = gymnasium.make('CartPole-v1')
-    env.reset()
     for _ in range(2):
         s, _ = env.reset()
         for _ in range(500):  # in one episode
@@ -25,12 +22,10 @@ def fitness_fn(ind: mevo.individuals.Individual, conf: dict) -> float:
 
 if __name__ == "__main__":
     # training
-    t0 = time.time()
     with mevo.GeneticAlgoNet(max_size=20, layer_size=[4, 8, 2], drop_rate=0.7, mutate_rate=0.5, n_worker=-1) as pop:
         for generation in range(40):
             pop.evolve(fitness_fn=fitness_fn)
             print(f"generation={generation}, top_fitness={pop.top.fitness:.2f}")
-    print(time.time() - t0)
 
     # deploy the best individual
     env = gymnasium.make('CartPole-v1', render_mode="human")

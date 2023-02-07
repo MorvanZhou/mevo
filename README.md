@@ -21,7 +21,6 @@ import numpy as np
 def fitness_fn(ind: mevo.individuals.Individual, conf: dict) -> float:
     ep_r = 0
     env = gymnasium.make('CartPole-v1')
-    env.reset()
     for _ in range(2):
         s, _ = env.reset()
         for _ in range(500):  # in one episode
