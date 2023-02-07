@@ -202,6 +202,7 @@ For policy learning or Reinforcement learning alternative, the following two met
 | Training     | Has forward and backward propagation | Only has forward propagation, but need crossover or mutation operation (lighter than backpropagation) |
 | Exploration  | Needs carefully set explore policy   | Different children setting automatically ensure the exploration                                       |
 | Memory needs | Can only keep one set of parameters  | In each generation, must compute all children's parameters (parallel computing save time)             |
+| Network Size | Generally large and deep net         | With a large scale exploration, a relatively small net can perform a good job                         |
 
 ### A `mevo.GeneticAlgoNet()` example:
 
