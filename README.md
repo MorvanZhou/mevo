@@ -113,7 +113,7 @@ if __name__ == "__main__":
             print(f"generation={generation}, top_fitness={pop.top.fitness:.2f}")
 ```
 
-Note that the parallel code must be run under `if __name__ == "__main__"：` scope,
+Note that the parallel code must be ran under `if __name__ == "__main__"：` scope,
 otherwise a python multiprocessing err will occur.
 
 # Install
