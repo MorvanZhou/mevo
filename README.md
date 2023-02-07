@@ -116,6 +116,14 @@ if __name__ == "__main__":
 Note that the parallel code must be run under `if __name__ == "__main__"：` scope,
 otherwise a python multiprocessing err will occur.
 
+# Install
+
+Using pip to install MEvo
+
+```shell
+pip3 install mevo
+```
+
 # Methods and Parameters
 
 MEvo support following populations:
