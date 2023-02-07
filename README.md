@@ -57,19 +57,19 @@ while True:
             break
 ```
 
-![cartpole](images/cartpole.gif)
+![cartpole](https://github.com/MorvanZhou/mevo/raw/main/images/cartpole.gif)
 
 # What is MEvo
 
 In the MEvo, the smallest data segment is Gene. A set of gene can be packed into a Chromosome.
 Chromosomes then formed an Individual. A Population consists of many individuals.
 
-![data](images/dataStructural.png)
+![data](https://github.com/MorvanZhou/mevo/raw/main/images/dataStructural.png)
 
 This is different from the classical Genetic Algorithm which their chromosome only consists of a 1D array.
 In other words, chromosome in the MEvo is n-D array with different shape.
 
-![data](images/dataShape.png)
+![data](https://github.com/MorvanZhou/mevo/raw/main/images/dataShape.png)
 
 **Why making data shape varied?**
 
@@ -88,14 +88,14 @@ The Genetic Algorithm basically has two steps:
 The following image shows how crossover on two parents chromosomes,
 and how to mutate the new chromosome.
 
-![crossoverMutation](images/crossoverMutation.png)
+![crossoverMutation](https://github.com/MorvanZhou/mevo/raw/main/images/crossoverMutation.png)
 
 And MEvo's Evolution Strategy has different two steps:
 
 1. mutate gene (normal distribution) from one single chromosome
 2. update this chromosome by all mutated results
 
-![es](images/es.png)
+![es](https://github.com/MorvanZhou/mevo/raw/main/images/es.png)
 
 # Parallel training
 
