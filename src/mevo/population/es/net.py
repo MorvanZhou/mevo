@@ -34,9 +34,9 @@ class EvolutionStrategyNet(Population):
             layer_size: tp.Sequence[int],
             mutate_strength: float = 0.01,
             learning_rate: float = 0.05,
+            n_worker: int = 1,
             w_initializer: tp.Optional[chromosomes.initializers.Initializer] = None,
             b_initializer: tp.Optional[chromosomes.initializers.Initializer] = None,
-            parallel: bool = False,
             seed: int = None,
     ):
         chromo_size = []
@@ -46,7 +46,7 @@ class EvolutionStrategyNet(Population):
         super().__init__(
             max_size=max_size,
             chromo_size=chromo_size,
-            parallel=parallel,
+            n_worker=n_worker,
             seed=seed,
         )
         if w_initializer is None:
@@ -80,7 +80,6 @@ class EvolutionStrategyNet(Population):
         self.individual = individuals.EvolutionStrategyDense(mutate_strength=self.mutate_strength, rng=self._rng)
         self.individual.chromosomes = cs
 
-
     def evolve(
             self,
             fitness_fn: tp.Callable[[individuals.EvolutionStrategyDense, dict], float],
@@ -88,7 +87,7 @@ class EvolutionStrategyNet(Population):
         # mirrored sampling, pass seed instead whole noise matrix to parallel will save your time
         noise_seed = self._rng.integers(0, 2 ** 32 - 1, size=self.max_size, dtype=np.uint32).repeat(2)
 
-        if self.parallel:
+        if self.n_worker > 1:
             self._check_parallel_condition()
 
             try:

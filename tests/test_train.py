@@ -171,11 +171,11 @@ class GATest(unittest.TestCase):
     def ga_pendulum(self, parallel, step):
         max_size = 40
         with mevo.GeneticAlgoNet(
-            max_size=max_size,
-            layer_size=[3, 32, 1],
-            drop_rate=0.7,
-            parallel=parallel,
-            seed=1
+                max_size=max_size,
+                layer_size=[3, 32, 1],
+                drop_rate=0.7,
+                n_worker=-1 if parallel else 1,
+                seed=1
         ) as pop:
             for _ in range(step):
                 drop_num = max(1, int(pop.max_size * pop.drop_rate))
@@ -209,7 +209,7 @@ class GATest(unittest.TestCase):
             max_size=5,
             layer_size=[3, 32, 1],
             mutate_rate=0.5,
-            parallel=True,
+            n_worker=3,
         )
         with self.assertRaises(RuntimeError) as cm:
             pop.evolve(fitness_fn=pendulum_fitness_fn)
@@ -245,7 +245,7 @@ class ESTest(unittest.TestCase):
                 max_size=max_size,
                 layer_size=[3, 32, 1],
                 mutate_strength=0.7,
-                parallel=True,
+                n_worker=3,
                 seed=1
         ) as pop:
             for _ in range(3):

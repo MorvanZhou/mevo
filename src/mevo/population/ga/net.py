@@ -36,7 +36,7 @@ class GeneticAlgoNet(GAPopulation):
             drop_rate: float = 0.4,
             mutate_rate: float = 0.5,
             mutate_strength: float = 0.05,
-            parallel: bool = False,
+            n_worker: int = 1,
             w_initializer: tp.Optional[chromosomes.initializers.Initializer] = None,
             b_initializer: tp.Optional[chromosomes.initializers.Initializer] = None,
             seed: int = None,
@@ -50,7 +50,7 @@ class GeneticAlgoNet(GAPopulation):
             chromo_size=chromo_size,
             drop_rate=drop_rate,
             mutate_rate=mutate_rate,
-            parallel=parallel,
+            n_worker=n_worker,
             seed=seed,
         )
         if w_initializer is None:

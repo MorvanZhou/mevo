@@ -16,13 +16,13 @@ class GAPopulation(Population, ABC):
             chromo_size: mtype.ChromosomeSize,
             mutate_rate: float,
             drop_rate: float = 0.4,
-            parallel: bool = False,
+            n_worker: int = 1,
             seed: int = None,
     ):
         super().__init__(
             max_size=max_size,
             chromo_size=chromo_size,
-            parallel=parallel,
+            n_worker=n_worker,
             seed=seed,
         )
         self.mutate_rate = mutate_rate
@@ -86,7 +86,7 @@ class GAPopulation(Population, ABC):
         q = PriorityQueue(maxsize=self.max_size)
         kept = {}
 
-        if self.parallel:
+        if self.n_worker > 1:
             self._check_parallel_condition()
 
             try:
@@ -146,7 +146,7 @@ class GAPopulation(Population, ABC):
 
     def __enter__(self):
         self._parallel_in_with_statement = True
-        if self.parallel:
+        if self.n_worker > 1:
             ctx = multiprocessing.get_context(method='spawn')
             cc = multiprocessing.cpu_count()
             self._pool = ctx.Pool(

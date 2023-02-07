@@ -17,14 +17,16 @@ class Population(ABC):
             self,
             max_size: int,
             chromo_size: mtype.ChromosomeSize,
-            parallel: bool = False,
+            n_worker: int = 1,
             seed: int = None,
     ):
         self.max_size = max_size
         if isinstance(chromo_size, int):
             chromo_size = [1] * chromo_size
         self.chromo_shape: tp.Sequence[int] = chromo_size
-        self.parallel = parallel
+        if n_worker <= -1:
+            n_worker = multiprocessing.cpu_count()
+        self.n_worker = n_worker
         self.seed = seed
         self._rng = np.random.default_rng(seed)
         self._parallel_in_with_statement = False
@@ -48,7 +50,6 @@ class Population(ABC):
                 f"if run on parallel mode, please use 'with' statement. For example:{t}"
             )
 
-
     @abstractmethod
     def _build(self):
         pass
@@ -70,11 +71,10 @@ class Population(ABC):
 
     def __enter__(self):
         self._parallel_in_with_statement = True
-        if self.parallel:
+        if self.n_worker > 1:
             ctx = multiprocessing.get_context(method='spawn')
-            cc = multiprocessing.cpu_count()
             self._pool = ctx.Pool(
-                processes=self.max_size if self.max_size < cc else cc,
+                processes=self.max_size if self.max_size < self.n_worker else self.n_worker,
             )
         return self
 

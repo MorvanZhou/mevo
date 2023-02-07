@@ -28,7 +28,7 @@ class GeneticAlgoOrder(GAPopulation):
             chromo_size: mtype.ChromosomeSize,
             drop_rate: float = 0.4,
             mutate_rate: float = 0.01,
-            parallel: bool = False,
+            n_worker: int = 1,
             seed: int = None,
     ):
         super().__init__(
@@ -36,7 +36,7 @@ class GeneticAlgoOrder(GAPopulation):
             chromo_size=chromo_size,
             drop_rate=drop_rate,
             mutate_rate=mutate_rate,
-            parallel=parallel,
+            n_worker=n_worker,
             seed=seed,
         )
         self._build()
