@@ -1,0 +1,6 @@
+gymnasium[classic_control]>=0.27.1
+tox==3.24.3
+tox-conda
+build
+twine
+pylint
