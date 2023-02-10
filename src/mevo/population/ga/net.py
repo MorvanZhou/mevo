@@ -2,6 +2,7 @@ import typing as tp
 
 from mevo import chromosomes
 from mevo import individuals
+from mevo import utils
 from mevo.population.ga.base import GAPopulation
 
 
@@ -59,8 +60,8 @@ class GeneticAlgoNet(GAPopulation):
             b_initializer = self.default_b_initializer
         self.w_initializer = w_initializer
         self.b_initializer = b_initializer
-        self.w_initializer.set_seed(self._rng.integers(0, 2 ** 32 - 1))
-        self.b_initializer.set_seed(self._rng.integers(0, 2 ** 32 - 1))
+        self.w_initializer.set_seed(self._rng.integers(0, utils.MAX_FLOAT32))
+        self.b_initializer.set_seed(self._rng.integers(0, utils.MAX_FLOAT32))
         self.mutate_strength = mutate_strength
         self._build()
 

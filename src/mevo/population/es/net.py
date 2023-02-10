@@ -55,8 +55,8 @@ class EvolutionStrategyNet(Population):
             b_initializer = self.default_b_initializer
         self.w_initializer = w_initializer
         self.b_initializer = b_initializer
-        self.w_initializer.set_seed(self._rng.integers(0, 2 ** 32 - 1))
-        self.b_initializer.set_seed(self._rng.integers(0, 2 ** 32 - 1))
+        self.w_initializer.set_seed(self._rng.integers(0, utils.MAX_FLOAT32))
+        self.b_initializer.set_seed(self._rng.integers(0, utils.MAX_FLOAT32))
 
         base = self.max_size * 2  # *2 for mirrored sampling
         rank = np.arange(1, base + 1)
@@ -85,7 +85,7 @@ class EvolutionStrategyNet(Population):
             fitness_fn: tp.Callable[[individuals.EvolutionStrategyDense, dict], float],
     ):
         # mirrored sampling, pass seed instead whole noise matrix to parallel will save your time
-        noise_seed = self._rng.integers(0, 2 ** 32 - 1, size=self.max_size, dtype=np.uint32).repeat(2)
+        noise_seed = self._rng.integers(0, utils.MAX_FLOAT32, size=self.max_size, dtype=np.uint32).repeat(2)
 
         if self.n_worker > 1:
             self._check_parallel_condition()
