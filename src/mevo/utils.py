@@ -1,4 +1,4 @@
-MAX_FLOAT32 = 2 ** 32 - 1
+MAX_UINT32 = 2 ** 32 - 1
 
 
 def sign(k_id):

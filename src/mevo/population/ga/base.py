@@ -92,7 +92,7 @@ class GAPopulation(Population, ABC):
             try:
                 res = [
                     self._pool.apply_async(
-                        fitness_fn, (ind, {"seed": int(self._rng.integers(utils.MAX_FLOAT32))})) for ind in inds
+                        fitness_fn, (ind, {"seed": int(self._rng.integers(utils.MAX_UINT32))})) for ind in inds
                 ]
                 for r in res:
                     f = r.get()
@@ -108,7 +108,7 @@ class GAPopulation(Population, ABC):
         else:
             fitness = map(fitness_fn,
                           inds,
-                          [{"seed": int(self._rng.integers(utils.MAX_FLOAT32))} for _ in range(self.max_size)])
+                          [{"seed": int(self._rng.integers(utils.MAX_UINT32))} for _ in range(self.max_size)])
             for f in fitness:
                 iid = ids.pop(0)
                 q.put((f, iid))

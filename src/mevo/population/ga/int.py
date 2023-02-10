@@ -43,7 +43,7 @@ class GeneticAlgoInt(GAPopulation):
         if chromo_initializer is None:
             chromo_initializer = self.default_initializer
         self.chromo_initializer = chromo_initializer
-        self.chromo_initializer.set_seed(self._rng.integers(0, utils.MAX_FLOAT32))
+        self.chromo_initializer.set_seed(self._rng.integers(0, utils.MAX_UINT32))
         self.low = self.chromo_initializer.low
         self.high = self.chromo_initializer.high
         self._build()
