@@ -264,6 +264,8 @@ if __name__ == "__main__":
     show(top)
 ```
 
+![es](https://github.com/MorvanZhou/mevo/raw/main/images/pendulum_ga.gif)
+
 ### A `mevo.EvolutionStrategyNet()` example:
 
 ```python
@@ -326,3 +328,5 @@ if __name__ == "__main__":
     top = train()
     show(top)
 ```
+
+![es](https://github.com/MorvanZhou/mevo/raw/main/images/pendulum_es.gif)
