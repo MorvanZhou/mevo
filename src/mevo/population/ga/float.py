@@ -2,7 +2,7 @@ import typing as tp
 
 from mevo import chromosomes
 from mevo import individuals
-from mevo import mtype
+from mevo import mtype, utils
 from mevo.population.ga.base import GAPopulation
 
 
