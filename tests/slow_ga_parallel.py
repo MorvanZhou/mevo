@@ -23,7 +23,7 @@ def train():
             max_size=30,
             layer_size=[3, 32, 1],
             drop_rate=0.7,
-            mutate_rate=0.5,
+            mutate_rate=0.9,
             n_worker=-1,
     ) as pop:
         for ep in range(700):
